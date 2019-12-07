@@ -143,6 +143,7 @@
     <ClInclude Include="Control\CControl.h" />
     <ClInclude Include="Control\CShipControl.h" />
     <ClInclude Include="Game\CGame.h" />
+    <ClInclude Include="Game\MessageHandler.h" />
     <ClInclude Include="ResourceManager\CResourceManager.h" />
     <ClInclude Include="Scene\CScene.h" />
     <ClInclude Include="stdafx.h" />
@@ -154,6 +155,7 @@
     <ClCompile Include="Control\CControl.cpp" />
     <ClCompile Include="Control\CShipControl.cpp" />
     <ClCompile Include="Game\CGame.cpp" />
+    <ClCompile Include="Game\MessageHandler.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ResourceManager\CResourceManager.cpp" />
     <ClCompile Include="Scene\CScene.cpp" />

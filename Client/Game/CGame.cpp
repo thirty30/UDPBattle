@@ -22,7 +22,6 @@ tbool CGame::InitGame()
 	TMuffin_RegisterMouseCallback(ControlMouseEvent);
 	TMuffin_RegisterCursorCallback(ControlCursorEvent);
 	TMuffin_RegisterScrollCallback(ControlScrollEvent);
-	TMuffin_RegisterPhysicsCallBack(CGame::PhysicsCallBack);
 	TMuffin_RegisterGameLogicCallBack(CGame::GameLogicCallBack);
 	
 	if (TMuffin_Initialize(this->m_nScreenWidth, this->m_nScreenHigh, this->m_strWindowName.c_str()) == false)
@@ -104,11 +103,12 @@ tbool CGame::InitNet()
 
 void CGame::LoopNet()
 {
-	n32 nServerLen = sizeof(this->m_sockAddr);
-	n32 nLen = recvfrom(this->m_nSocketFD, this->m_pReceiveBuffer, RECEIVE_BUFFER_SIZE, 0, (struct sockaddr*)&this->m_sockAddr, &nServerLen);
+	sockaddr_in server;
+	n32 nServerLen = sizeof(server);
+	n32 nLen = recvfrom(this->m_nSocketFD, this->m_pReceiveBuffer, RECEIVE_BUFFER_SIZE, 0, (struct sockaddr*)&server, &nServerLen);
 	if (nLen > 0)
 	{
-
+		this->OnReceived(this->m_pReceiveBuffer, nLen);
 	}
 	else if (nLen == 0)
 	{
@@ -124,15 +124,50 @@ void CGame::LoopNet()
 	}
 }
 
+void CGame::OnReceived(tcchar* a_pData, n32 a_nSize)
+{
+	MessageHeader sHeader;
+	n32 nHeaderSize = (n32)sHeader.GetLength();
+	sHeader.Deserialize(a_pData, nHeaderSize);
+	n32 uMsgLength = (n32)sHeader.GetMsgLength();
+	if (uMsgLength != a_nSize)
+	{
+		return;
+	}
+	u32 uMsgID = sHeader.GetMsgID();
+	const tcchar* pData = a_pData + nHeaderSize;
+	n32 nDataSize = uMsgLength - nHeaderSize;
+	(this->*m_HandlerTable[uMsgID])(uMsgID, pData, nDataSize);
+}
+
+void CGame::SendToServer(u32 a_uMsgID, const PMessageBase& a_Msg)
+{
+	MessageHeader sHeader;
+	n32 nHeaderSize = sHeader.GetLength();
+	n32 nMsgLen = a_Msg.Serialize(m_pSendBuffer + nHeaderSize, SEND_BUFFER_SIZE - nHeaderSize);
+	sHeader.SetMsgID(a_uMsgID);
+	sHeader.SetMsgLength(nHeaderSize + nMsgLen);
+	sHeader.SetCompress(0);
+	sHeader.Serialize(m_pSendBuffer, nHeaderSize);
+	sendto(this->m_nSocketFD, m_pSendBuffer, sHeader.GetMsgLength(), 0, (struct sockaddr*)&this->m_sockAddr, sizeof(this->m_sockAddr));
+}
+
+void CGame::SendToServer(u32 a_uMsgID, const tcchar* a_pData, u32 a_uLen)
+{
+	MessageHeader sHeader;
+	n32 nHeaderSize = sHeader.GetLength();
+	sHeader.SetMsgID(a_uMsgID);
+	sHeader.SetMsgLength(nHeaderSize + a_uLen);
+	sHeader.SetCompress(0);
+	sHeader.Serialize(m_pSendBuffer, nHeaderSize);
+	TMemcpy(m_pSendBuffer + nHeaderSize, SEND_BUFFER_SIZE - nHeaderSize, a_pData, a_uLen);
+	sendto(this->m_nSocketFD, m_pSendBuffer, sHeader.GetMsgLength(), 0, (struct sockaddr*)&this->m_sockAddr, sizeof(this->m_sockAddr));
+}
+
 void CGame::SetScreenSize(n32 a_nWidth, n32 a_nHigh)
 {
 	this->m_nScreenWidth = a_nWidth;
 	this->m_nScreenHigh = a_nHigh;
-}
-
-void CGame::PhysicsLoop()
-{
-
 }
 
 void CGame::GameLogicLoop()
@@ -150,6 +185,7 @@ void CGame::GameLogicLoop()
 	{
 		this->m_pScene->Loop();
 	}
+	this->InitNet();
 }
 
 

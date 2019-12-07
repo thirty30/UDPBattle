@@ -16,8 +16,9 @@ private:
 	tcchar* m_pSendBuffer;
 	tcchar* m_pReceiveBuffer;
 
+#include "./MessageHandler.h"
+
 public:
-	static void PhysicsCallBack() { CGame::GetSingleton().PhysicsLoop(); }
 	static void GameLogicCallBack() { CGame::GetSingleton().GameLogicLoop(); }
 	
 public:
@@ -27,15 +28,20 @@ public:
 	tbool InitGame();
 	void ClearGame();
 	void LoopGame();
+
+	/////////////////////////////////////////////////////////////////
 	tbool InitNet();
 	void LoopNet();
+	void OnReceived(tcchar* a_pData, n32 a_nSize);
+	void SendToServer(u32 a_uMsgID, const PMessageBase& a_Msg);
+	void SendToServer(u32 a_uMsgID, const tcchar* a_pData, u32 a_uLen);
+	/////////////////////////////////////////////////////////////////
 
 	void SetScreenSize(n32 a_nWidth, n32 a_nHigh);
 	inline n32 GetScreenWidth() { return this->m_nScreenWidth; }
 	inline n32 GetScreenHigh() { return this->m_nScreenHigh; }
 	CScene* GetCurrentScene() { return this->m_pScene; }
 	CResourceManager* GetResourceManager() { return this->m_pResManager; }
-	void PhysicsLoop();
 	void GameLogicLoop();
 };
 

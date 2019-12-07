@@ -145,3 +145,4 @@ TMuffin/x64/Debug/TMuffin.vcxproj.FileListAbsolute.txt
 TMuffin/x64/Debug/vc142.idb
 TMuffin/x64/Debug/vc142.pdb
 Server/x64/Debug/Server.tlog/unsuccessfulbuild
+Client/x64/Debug/MessageHandler.obj
