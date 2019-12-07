@@ -5,7 +5,6 @@
 #include <lua/lua.hpp>
 
 #include "./CommonDefine.h"
-#include "./Rof/CRofManager.h"
 #include "./ResourceManager/CResourceManager.h"
 #include "./Control/CControl.h"
 #include "./Control/CCameraControl.h"
