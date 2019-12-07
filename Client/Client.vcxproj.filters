@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="CommonDefine.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Game\CGame.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\CScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Control\CCameraControl.h">
+      <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="Control\CControl.h">
+      <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager\CResourceManager.h">
+      <Filter>ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\CActor.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Control\CShipControl.h">
+      <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\CBullet.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="Game\CGame.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\CScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Control\CCameraControl.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
+    <ClCompile Include="Control\CControl.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager\CResourceManager.cpp">
+      <Filter>ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\CActor.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Control\CShipControl.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\CBullet.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Game">
+      <UniqueIdentifier>{025e6de1-a428-4057-b4ce-a40b4fed8db3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{8d681608-1b65-49b1-ad06-63fa6e893d28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Control">
+      <UniqueIdentifier>{962d1d76-0e3e-4f80-a067-7c5cf5c44b6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ResourceManager">
+      <UniqueIdentifier>{489dae04-512a-468f-a455-96d97f9fa927}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Actor">
+      <UniqueIdentifier>{b9bc1205-f361-4c24-b2e9-bd2e90b00a84}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
