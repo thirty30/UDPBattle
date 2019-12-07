@@ -44,42 +44,10 @@ MESSAGE_TAIL( MessageStr )
 
 //Register
 MESSAGE_HEAD(Register)
-MSG_ITEM(STR, Email)
-MSG_ITEM(STR, Password)
+MSG_ITEM( N8,	Value )
 MESSAGE_TAIL(Register)
 
-//Authenticate
-MESSAGE_HEAD(Authenticate)
-MSG_ITEM(STR, Email)
-MSG_ITEM(STR, Password)
-MESSAGE_TAIL(Authenticate)
-
-//RoomInfo
-MESSAGE_HEAD(RoomInfo)
-MSG_ITEM(N32, RoomID)
-MSG_ITEM(STR, RoomName)
-MSG_ITEM(N32, MemberNum)
-MESSAGE_TAIL(RoomInfo)
-
-//Room list
-MESSAGE_HEAD(RoomList)
-MSG_ITEM(N8, ResultCode)
-MSG_ITEM(N32, UserID)
-MSG_ITEM(N32, CreationDate)
-MSG_ITEM(ARRAY, RoomInfo)
-MESSAGE_TAIL(RoomList)
-
-//Broadcast
-MESSAGE_HEAD(Broadcast)
-MSG_ITEM(N16, Type)
-MSG_ITEM(STR, UserName)
-MSG_ITEM(STR, RoomName)
-MSG_ITEM(STR, Content)
-MESSAGE_TAIL(Broadcast)
-
-//chat message
-MESSAGE_HEAD(ChatMessage)
-MSG_ITEM(N32, RoomID)
-MSG_ITEM(STR, Content)
-MESSAGE_TAIL(ChatMessage)
+MESSAGE_HEAD( RegisterResp )
+MSG_ITEM( N8,	Value )
+MESSAGE_TAIL( RegisterResp )
 

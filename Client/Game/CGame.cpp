@@ -31,6 +31,7 @@ tbool CGame::InitGame()
 
 	if (this->InitNet() == false)
 	{
+		cout << "Init networking failed..." << endl;
 		return false;
 	}
 
@@ -82,6 +83,22 @@ tbool CGame::InitNet()
 	m_SendHeap.AllocHeap(MAX_SEND_HEAP_LENGTH);
 	RegisterMessageHeap(&m_SendHeap);
 
+	this->InitMessageHandler();
+
+	WORD wVersion = MAKEWORD(2, 2);
+	WSADATA wsaData;
+	DWORD Res = WSAStartup(wVersion, &wsaData);
+	if (Res != 0)
+	{
+		return false;
+	}
+
+	if (LOBYTE(wsaData.wVersion) != 2 || HIBYTE(wsaData.wVersion) != 2)
+	{
+		WSACleanup();
+		return false;
+	}
+
 	this->m_nSocketFD = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 	if (this->m_nSocketFD == SOCKET_ERROR)
 	{
@@ -112,7 +129,8 @@ void CGame::LoopNet()
 	}
 	else if (nLen == 0)
 	{
-
+		cout << "Server closed..." << endl;
+		return;
 	}
 	else
 	{
@@ -185,7 +203,7 @@ void CGame::GameLogicLoop()
 	{
 		this->m_pScene->Loop();
 	}
-	this->InitNet();
+	this->LoopNet();
 }
 
 

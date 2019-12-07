@@ -12,6 +12,9 @@ if (pSession == NULL) \
 void CServer::HandlerRegister(u32 a_uMsgID, u64 a_nSID, const tcchar* a_pMsgBase, u32 a_uSize)
 {
 	READ_CLIENT_MESSAGE(a_uMsgID, PRegister);
-	string strEmail = string(msgRecv.GetEmail(), msgRecv.GetEmailSize());
-	string strPassword = string(msgRecv.GetPassword(), msgRecv.GetPasswordSize());
+	cout << (n32)msgRecv.GetValue() << endl;
+
+	PRegisterResp msgSend;
+	msgSend.SetValue(55);
+	this->SendToClient(S2C_REGISTER_RESP, a_nSID, msgSend);
 }

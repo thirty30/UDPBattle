@@ -5,13 +5,13 @@ tbool InitMessageHandler()
 {
 	#define SET_HANDLER_TABLE( MsgID, Func ) m_HandlerTable[ MsgID ] = &CGame::Func;
 
-	SET_HANDLER_TABLE(C2S_REGISTER, HandlerRegister);
+	SET_HANDLER_TABLE(S2C_REGISTER_RESP, HandlerRegisterResp);
 
 
 #undef SET_HANDLER_TABLE
 	return true;
 }
 
-void HandlerRegister(u32 a_uMsgID, const tcchar* a_pMsgData, u32 a_uSize);
+void HandlerRegisterResp(u32 a_uMsgID, const tcchar* a_pMsgData, u32 a_uSize);
 
 

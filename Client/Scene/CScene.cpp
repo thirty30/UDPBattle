@@ -68,6 +68,10 @@ tbool CScene::LoadScene()
 	pActor->InitRenderer(pMeshShip, pMaterial);
 	CShipControl::GetSingleton().pActor = pActor;
 
+	PRegister msgSend;
+	msgSend.SetValue(126);
+	CGame::GetSingleton().SendToServer(C2S_REGISTER, msgSend);
+
 	return true;
 }
 
