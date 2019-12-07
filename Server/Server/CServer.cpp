@@ -4,7 +4,6 @@ T_IMPLEMENT_SINGLETON(CServer)
 CServer::CServer()
 {
 	this->m_IsRun = false;
-	this->m_pReceiveBuffer = new tcchar[SERVER_RECEIVE_BUFFER_SIZE];
 	this->m_mapSID2Session.clear();
 }
 
@@ -120,15 +119,17 @@ tbool CServer::Init()
 		return false;
 	}
 
-	m_SendHeap.AllocHeap(MAX_SEND_HEAP_LENGTH);
-	RegisterMessageHeap(&m_SendHeap);
-
 	cout << "Server Started..." <<endl;
 	return true;
 }
 
 tbool CServer::InitNet()
 {
+	this->m_pReceiveBuffer = new tcchar[SERVER_RECEIVE_BUFFER_SIZE];
+	this->m_pSendBuffer = new tcchar[SERVER_SEND_BUFFER_SIZE];
+	m_SendHeap.AllocHeap(MAX_SEND_HEAP_LENGTH);
+	RegisterMessageHeap(&m_SendHeap);
+
 	InitMessageHandler();
 
 	WORD wVersion = MAKEWORD(2, 2);
@@ -151,12 +152,12 @@ tbool CServer::InitNet()
 		return false;
 	}
 
-	SOCKADDR_IN receiverAddr;
-	receiverAddr.sin_family = AF_INET;
-	receiverAddr.sin_port = htons(LISTEN_PORT);
-	receiverAddr.sin_addr.s_addr = htonl(INADDR_ANY);
+	sockaddr_in receAddr;
+	receAddr.sin_family = AF_INET;
+	receAddr.sin_port = htons(LISTEN_PORT);
+	receAddr.sin_addr.s_addr = htonl(INADDR_ANY);
 
-	if (bind(this->m_nListenFD, (SOCKADDR*)&receiverAddr, sizeof(receiverAddr)) == SOCKET_ERROR)
+	if (bind(this->m_nListenFD, (SOCKADDR*)&receAddr, sizeof(receAddr)) == SOCKET_ERROR)
 	{
 		return false;
 	}
@@ -208,7 +209,7 @@ void CServer::Clear()
 {
 	delete m_pSendBuffer;
 
-	hash_map<socketfd, CSession*>::const_iterator iter = this->m_mapSID2Session.begin();
+	hash_map<u64, CSession*>::const_iterator iter = this->m_mapSID2Session.begin();
 	for (; iter != this->m_mapSID2Session.end(); iter++)
 	{
 		if (iter->second != NULL)
@@ -223,7 +224,7 @@ void CServer::Clear()
 
 CSession* CServer::FindSession(u64 a_nSessionID)
 {
-	hash_map<socketfd, CSession*>::const_iterator iter = this->m_mapSID2Session.find(a_nSessionID);
+	hash_map<u64, CSession*>::const_iterator iter = this->m_mapSID2Session.find(a_nSessionID);
 	if (iter == this->m_mapSID2Session.end())
 	{
 		return NULL;
@@ -234,7 +235,7 @@ CSession* CServer::FindSession(u64 a_nSessionID)
 CSession* CServer::FindSession(sockaddr_in& a_rClient)
 {
 	u64 nSessionID = CalcSessionID(a_rClient);
-	hash_map<socketfd, CSession*>::const_iterator iter = this->m_mapSID2Session.find(nSessionID);
+	hash_map<u64, CSession*>::const_iterator iter = this->m_mapSID2Session.find(nSessionID);
 	if (iter == this->m_mapSID2Session.end())
 	{
 		return NULL;

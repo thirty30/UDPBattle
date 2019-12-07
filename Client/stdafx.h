@@ -1,9 +1,13 @@
 #pragma once
 
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
+#include <winsock2.h>
+#include <windows.h>
+#include <WS2tcpip.h>
+
 #include "../TCore/TCore.h"
 #include "../TMuffin/TMuffin.h"
-#include <lua/lua.hpp>
-
+#include "../Protocol/TProtocol.h"
 #include "./CommonDefine.h"
 #include "./ResourceManager/CResourceManager.h"
 #include "./Control/CControl.h"

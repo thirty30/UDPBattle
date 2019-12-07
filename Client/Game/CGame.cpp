@@ -27,7 +27,12 @@ tbool CGame::InitGame()
 	
 	if (TMuffin_Initialize(this->m_nScreenWidth, this->m_nScreenHigh, this->m_strWindowName.c_str()) == false)
 	{
-		return 0;
+		return false;
+	}
+
+	if (this->InitNet() == false)
+	{
+		return false;
 	}
 
 	this->m_pResManager = new CResourceManager();
@@ -60,6 +65,8 @@ void CGame::ClearGame()
 		this->m_pScene = NULL;
 	}
 
+	UnRegisterMessageHeap(&m_SendHeap);
+
 	//release engine
 	TMuffin_Clear();
 }
@@ -67,6 +74,54 @@ void CGame::ClearGame()
 void CGame::LoopGame()
 {
 	TMuffin_Loop();
+}
+
+tbool CGame::InitNet()
+{
+	this->m_pReceiveBuffer = new tcchar[RECEIVE_BUFFER_SIZE];
+	this->m_pSendBuffer = new tcchar[SEND_BUFFER_SIZE];
+	m_SendHeap.AllocHeap(MAX_SEND_HEAP_LENGTH);
+	RegisterMessageHeap(&m_SendHeap);
+
+	this->m_nSocketFD = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+	if (this->m_nSocketFD == SOCKET_ERROR)
+	{
+		return false;
+	}
+
+	TMemzero((tcchar*)&this->m_sockAddr, sizeof(this->m_sockAddr));
+	this->m_sockAddr.sin_family = AF_INET;
+	this->m_sockAddr.sin_port = htons(SERVER_PORT);
+	this->m_sockAddr.sin_addr.s_addr = inet_addr(SERVER_ADDRESS);
+
+	unsigned long ub = 1;
+	if (ioctlsocket(this->m_nSocketFD, FIONBIO, (unsigned long*)&ub) == SOCKET_ERROR)
+	{
+		return false;
+	}
+	return true;
+}
+
+void CGame::LoopNet()
+{
+	n32 nServerLen = sizeof(this->m_sockAddr);
+	n32 nLen = recvfrom(this->m_nSocketFD, this->m_pReceiveBuffer, RECEIVE_BUFFER_SIZE, 0, (struct sockaddr*)&this->m_sockAddr, &nServerLen);
+	if (nLen > 0)
+	{
+
+	}
+	else if (nLen == 0)
+	{
+
+	}
+	else
+	{
+		if (WSAGetLastError() == WSAEWOULDBLOCK)
+		{
+			return;
+		}
+		TMemzero(this->m_pReceiveBuffer, RECEIVE_BUFFER_SIZE);
+	}
 }
 
 void CGame::SetScreenSize(n32 a_nWidth, n32 a_nHigh)

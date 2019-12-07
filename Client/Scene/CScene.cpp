@@ -19,13 +19,6 @@ tbool CScene::Init()
 	this->m_pCameraControl = new CCameraControl();
 	this->m_pShipControl = new CShipControl();
 
-	lua_State* pL = luaL_newstate();
- 	luaL_openlibs(pL);
- 	lua_gc(pL, LUA_GCSTOP, 0);
- 
- 	luaL_loadfile(pL, "../LuaScripts/Main.lua");
- 	lua_pcall(pL, 0, 0, 0);
-
 	return true;
 }
 

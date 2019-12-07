@@ -10,6 +10,12 @@ private:
 	EGameStatus m_eGameStatus;
 	CResourceManager* m_pResManager;
 
+	SOCKET m_nSocketFD;
+	sockaddr_in m_sockAddr;
+	TMessageSendHeap m_SendHeap;
+	tcchar* m_pSendBuffer;
+	tcchar* m_pReceiveBuffer;
+
 public:
 	static void PhysicsCallBack() { CGame::GetSingleton().PhysicsLoop(); }
 	static void GameLogicCallBack() { CGame::GetSingleton().GameLogicLoop(); }
@@ -21,6 +27,8 @@ public:
 	tbool InitGame();
 	void ClearGame();
 	void LoopGame();
+	tbool InitNet();
+	void LoopNet();
 
 	void SetScreenSize(n32 a_nWidth, n32 a_nHigh);
 	inline n32 GetScreenWidth() { return this->m_nScreenWidth; }

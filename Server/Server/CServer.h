@@ -5,8 +5,8 @@ class CServer : public CSingleton<CServer>
 private:
 	TMessageSendHeap m_SendHeap;	//send message buffer
 	tbool m_IsRun;
+	SOCKET m_nListenFD;
 	tcchar* m_pSendBuffer;
-	socketfd m_nListenFD;
 	tcchar* m_pReceiveBuffer;
 	hash_map<u64, CSession*> m_mapSID2Session;
 
