@@ -7,6 +7,7 @@ CScene::CScene()
 	this->m_pCamera = NULL;
 	this->m_nGUIDIdx = 0;
 	this->m_pSkyBox = NULL;
+	this->m_fLastFrameTime = 0;
 }
 
 CScene::~CScene()
@@ -61,15 +62,25 @@ tbool CScene::LoadScene()
 	//scene items
 	CDirectionLight* pDirectionLight = new CDirectionLight();
 
-	CActor* pActor = new CActor();
-	CMaterialStandard* pMaterial = (CMaterialStandard*)CResourceManager::GetSingleton().FindMaterial(E_MATERIAL_ID_STANDARD);
-	CTexture* pTexture = CResourceManager::GetSingleton().FindTexture(E_TEXTURE_ID_DIFFUSE);
-	pMaterial->AddTexture(pTexture);
-	pActor->InitRenderer(pMeshShip, pMaterial);
-	CShipControl::GetSingleton().pActor = pActor;
+	for (n32 i = 0; i < 4; i++)
+	{
+		this->m_pActorArray[i] = new CActor();
+		CMaterialStandard* pMaterial = (CMaterialStandard*)CResourceManager::GetSingleton().FindMaterial(E_MATERIAL_ID_STANDARD);
+		CTexture* pTexture = CResourceManager::GetSingleton().FindTexture(E_TEXTURE_ID_DIFFUSE);
+		pMaterial->AddTexture(pTexture);
+		this->m_pActorArray[i]->InitRenderer(pMeshShip, pMaterial);
+	}	
+	
+	for (n32 i = 0; i < 4; i++)
+	{
+		this->m_pServerActorArray[i] = new CActor();
+		CMaterialDefault* pMaterial = (CMaterialDefault*)CResourceManager::GetSingleton().FindMaterial(E_MATERIAL_ID_DEFAULT);
+		pMaterial->SetColor(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+		this->m_pServerActorArray[i]->InitRenderer(pMeshShip, pMaterial);
+	}
 
 	PRegister msgSend;
-	msgSend.SetValue(126);
+	msgSend.SetValue(0);
 	CGame::GetSingleton().SendToServer(C2S_REGISTER, msgSend);
 
 	return true;
@@ -89,7 +100,24 @@ void CScene::Clear()
 
 void CScene::Loop()
 {
-	CShipControl::GetSingleton().pActor->Update();
+	f32 fNowTime = TMuffin_GetNowFrameTime();
+	f32 fDeltaTime = fNowTime - this->m_fLastFrameTime;
+	if (fDeltaTime < (1.0f / 60))
+	{
+		return;
+	}
+	this->m_fLastFrameTime = fNowTime;
+
+	//fDeltaTime = 1.0f / 60;
+	if (CShipControl::GetSingleton().pActor != NULL)
+	{
+		CShipControl::GetSingleton().pActor->Update(fDeltaTime);
+	}
+	for (n32 i = 0; i < 4; i++)
+	{
+		this->m_pActorArray[i]->Update(fDeltaTime);
+		this->m_pServerActorArray[i]->Update(fDeltaTime);
+	}
 }
 
 

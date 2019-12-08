@@ -5,6 +5,7 @@ CServer::CServer()
 {
 	this->m_IsRun = false;
 	this->m_mapSID2Session.clear();
+	this->m_fLastFrameTime = 0;
 }
 
 CServer::~CServer()
@@ -50,6 +51,7 @@ void CServer::OnConnected(sockaddr_in& a_rClient)
 void CServer::OnDisconnected(sockaddr_in& a_rClient)
 {
 	u64 nSID = CalcSessionID(a_rClient);
+	CBattle::GetSingleton().DeletePlayer(nSID);
 	this->DeleteSession(nSID);
 }
 
@@ -113,9 +115,17 @@ void CServer::SendToClient(u32 a_uMsgID, u64 a_nSID, const tcchar* a_pData, u32 
 
 tbool CServer::Init()
 {
+	srand(TGetTimeStamp());
+
 	if (InitNet() == false)
 	{
-		cout << "Init Net Fail..." << endl;
+		cout << "Init Net Failed..." << endl;
+		return false;
+	}
+
+	if (this->m_Battle.Init() == false)
+	{
+		cout << "Init Battle Failed..." << endl;
 		return false;
 	}
 
@@ -201,7 +211,17 @@ void CServer::Run()
 	m_IsRun = true;
 	while (m_IsRun == true)
 	{
+		f32 fNowTime = (f32)m_Counter.GetCurrentFramesTime();
+		f32 fDeltaTime = fNowTime - this->m_fLastFrameTime;
+		f32 fLimitTime = 1.0f / 60;
+		if (fDeltaTime < fLimitTime)
+		{
+			continue;
+		}
+		
+		this->m_fLastFrameTime = fNowTime;
 		this->LoopNet();
+		this->m_Battle.Update(fNowTime, fDeltaTime);
 	}
 }
 

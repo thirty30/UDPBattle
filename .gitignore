@@ -146,3 +146,5 @@ TMuffin/x64/Debug/vc142.idb
 TMuffin/x64/Debug/vc142.pdb
 Server/x64/Debug/Server.tlog/unsuccessfulbuild
 Client/x64/Debug/MessageHandler.obj
+Server/x64/Debug/CBattle.obj
+Server/x64/Debug/CPlayer.obj

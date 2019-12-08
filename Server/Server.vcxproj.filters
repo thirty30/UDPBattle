@@ -9,6 +9,12 @@
     <ClCompile Include="Server\MessageHandler.cpp">
       <Filter>Server</Filter>
     </ClCompile>
+    <ClCompile Include="Battle\CBattle.cpp">
+      <Filter>Battle</Filter>
+    </ClCompile>
+    <ClCompile Include="Battle\CPlayer.cpp">
+      <Filter>Battle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -22,10 +28,19 @@
       <Filter>Server</Filter>
     </ClInclude>
     <ClInclude Include="CommonDefine.h" />
+    <ClInclude Include="Battle\CBattle.h">
+      <Filter>Battle</Filter>
+    </ClInclude>
+    <ClInclude Include="Battle\CPlayer.h">
+      <Filter>Battle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Server">
       <UniqueIdentifier>{8616f421-51c8-462d-b923-57fe603f8b2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Battle">
+      <UniqueIdentifier>{b99b24d3-688b-40e1-9834-3e51ff7c8df1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

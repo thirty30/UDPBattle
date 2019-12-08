@@ -13,15 +13,16 @@ CShipControl::~CShipControl()
 
 void CShipControl::ControlKeyPress(n32 a_nKey, n32 a_nScancode, n32 a_nAction, n32 a_nMods)
 {
+	
 	if (a_nKey == GLFW_KEY_W)
 	{
 		if (a_nAction == GLFW_PRESS)
 		{
-			this->pActor->m_nControlFlag[0] = 1;
+			this->pActor->m_nAction |= ACTION_FRONT;
 		}
 		if (a_nAction == GLFW_RELEASE)
 		{
-			this->pActor->m_nControlFlag[0] = 0;
+			this->pActor->m_nAction ^= ACTION_FRONT;
 		}
 	}
 
@@ -29,11 +30,11 @@ void CShipControl::ControlKeyPress(n32 a_nKey, n32 a_nScancode, n32 a_nAction, n
 	{
 		if (a_nAction == GLFW_PRESS)
 		{
-			this->pActor->m_nControlFlag[1] = 1;
+			this->pActor->m_nAction |= ACTION_BACK;
 		}
 		if (a_nAction == GLFW_RELEASE)
 		{
-			this->pActor->m_nControlFlag[1] = 0;
+			this->pActor->m_nAction ^= ACTION_BACK;
 		}
 	}
 
@@ -41,11 +42,11 @@ void CShipControl::ControlKeyPress(n32 a_nKey, n32 a_nScancode, n32 a_nAction, n
 	{
 		if (a_nAction == GLFW_PRESS)
 		{
-			this->pActor->m_nControlFlag[2] = 1;
+			this->pActor->m_nAction |= ACTION_LEFT;
 		}
 		if (a_nAction == GLFW_RELEASE)
 		{
-			this->pActor->m_nControlFlag[2] = 0;
+			this->pActor->m_nAction ^= ACTION_LEFT;
 		}
 	}
 
@@ -53,11 +54,11 @@ void CShipControl::ControlKeyPress(n32 a_nKey, n32 a_nScancode, n32 a_nAction, n
 	{
 		if (a_nAction == GLFW_PRESS)
 		{
-			this->pActor->m_nControlFlag[3] = 1;
+			this->pActor->m_nAction |= ACTION_RIGHT;
 		}
 		if (a_nAction == GLFW_RELEASE)
 		{
-			this->pActor->m_nControlFlag[3] = 0;
+			this->pActor->m_nAction ^= ACTION_RIGHT;
 		}
 	}
 
@@ -69,6 +70,7 @@ void CShipControl::ControlKeyPress(n32 a_nKey, n32 a_nScancode, n32 a_nAction, n
 			pBullet->m_vVelocity = this->pActor->m_vTowards * 100.0f;
 		}
 	}
+	
 }
 
 void CShipControl::ControlMousePress(n32 a_nKey, n32 a_nAction, n32 a_nMods)

@@ -12,6 +12,9 @@ using namespace std;
 #include <WS2tcpip.h>
 #include <io.h>
 
+#include <glm/glm.hpp>
+#include <glm/gtx/vector_angle.hpp>
+
 #define _SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS
 #include <hash_map>
 
@@ -19,6 +22,8 @@ using namespace std;
 #include "../Protocol/TProtocol.h"
 #include "./CommonDefine.h"
 #include "./Server/CSession.h"
+#include "./Battle/CPlayer.h"
+#include "./Battle/CBattle.h"
 #include "./Server/CServer.h"
 
 

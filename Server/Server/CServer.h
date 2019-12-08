@@ -3,12 +3,15 @@
 class CServer : public CSingleton<CServer>
 {
 private:
+	TTimeCounter m_Counter;
+	f32 m_fLastFrameTime;
 	TMessageSendHeap m_SendHeap;	//send message buffer
 	tbool m_IsRun;
 	SOCKET m_nListenFD;
 	tcchar* m_pSendBuffer;
 	tcchar* m_pReceiveBuffer;
 	hash_map<u64, CSession*> m_mapSID2Session;
+	CBattle m_Battle;
 
 private:
 #include "./MessageHandler.h"

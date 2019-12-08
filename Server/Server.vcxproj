@@ -71,7 +71,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)bin_debug_x64</OutDir>
-    <IncludePath>$(ProjectDir);$(SolutionDir)Dependence/include/x64;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(SolutionDir)Dependence/include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)bin_debug_x64;$(SolutionDir)Dependence/lib/x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -129,6 +129,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Battle\CBattle.cpp" />
+    <ClCompile Include="Battle\CPlayer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Server\CServer.cpp" />
     <ClCompile Include="Server\MessageHandler.cpp" />
@@ -137,6 +139,8 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Battle\CBattle.h" />
+    <ClInclude Include="Battle\CPlayer.h" />
     <ClInclude Include="CommonDefine.h" />
     <ClInclude Include="Server\CServer.h" />
     <ClInclude Include="Server\CSession.h" />

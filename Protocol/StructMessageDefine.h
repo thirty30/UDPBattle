@@ -51,3 +51,26 @@ MESSAGE_HEAD( RegisterResp )
 MSG_ITEM( N8,	Value )
 MESSAGE_TAIL( RegisterResp )
 
+//Sync Player State
+MESSAGE_HEAD(PlayerState)
+MSG_ITEM( N8,	ID )
+MSG_ITEM( N8,	State )
+MSG_ITEM( N8,	Action )
+MSG_ITEM( F32,	X )
+MSG_ITEM( F32,	Z )
+MSG_ITEM( F32,	RX )
+MSG_ITEM( F32,	RY )
+MSG_ITEM( F32,	RZ )
+MSG_ITEM( F32,	RW )
+MSG_ITEM( F32,	TX )
+MSG_ITEM( F32,	TZ )
+MESSAGE_TAIL(PlayerState)
+
+MESSAGE_HEAD(PlayerStateList)
+MSG_ITEM( ARRAY, PlayerState)
+MESSAGE_TAIL(PlayerStateList)
+
+MESSAGE_HEAD(PlayerAction)
+MSG_ITEM( N8,	Action )
+MESSAGE_TAIL(PlayerAction)
+
