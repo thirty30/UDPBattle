@@ -34,6 +34,17 @@ void CBattle::Update(f32 a_fNowTime, f32 a_fDeltaTime)
 			continue;
 		}
 		rPlayer.Move(a_fDeltaTime);
+		rPlayer.UpdateBullet(a_fDeltaTime);
+
+		for (n32 j = 0; j < 4; j++)
+		{
+			CPlayer& rTargetPlayer = this->m_PlayerArray[j];
+			f32 fDis = glm::distance(rTargetPlayer.m_vPosition, rPlayer.m_bullet.m_vPosition);
+			if (fDis <= BULLET_HIT_RADIUS && rPlayer.m_bullet.m_bIsActive == true && i != j)
+			{
+				rTargetPlayer.m_eState = E_PLAYER_STATE_DEAD;
+			}
+		}
 	}
 
 	this->SyncPlayerState(a_fNowTime);
@@ -42,7 +53,7 @@ void CBattle::Update(f32 a_fNowTime, f32 a_fDeltaTime)
 void CBattle::SyncPlayerState(f32 a_fNowTime)
 {
 	f32 fDeltaTime = a_fNowTime - this->m_fLastFrameTime;
-	if (fDeltaTime < (1.0f / 5))
+	if (fDeltaTime < (1.0f / RESURGENCE_TIME))
 	{
 		return;
 	}
@@ -100,7 +111,7 @@ void CBattle::DeletePlayer(u64 a_nSID)
 	}
 }
 
-void CBattle::PlayerAction(CSession* a_pSession, n8 a_nAction)
+void CBattle::PlayerAction(CSession* a_pSession, PPlayerAction& a_rMsg)
 {
 	for (n32 i = 0; i < 4; i++)
 	{
@@ -109,7 +120,25 @@ void CBattle::PlayerAction(CSession* a_pSession, n8 a_nAction)
 		{
 			continue;
 		}
-		rPlayer.m_nAction = a_nAction;
+		rPlayer.m_nAction = a_rMsg.GetAction();
+		rPlayer.m_vPosition.x = a_rMsg.GetX();
+		rPlayer.m_vPosition.z = a_rMsg.GetZ();
+		rPlayer.m_vTowards.x = a_rMsg.GetTX();
+		rPlayer.m_vTowards.z = a_rMsg.GetTZ();
+		rPlayer.m_qRotation = glm::quat(a_rMsg.GetRW(), 0.0f, a_rMsg.GetRY(), 0.0f);
+	}
+}
+
+void CBattle::PlayerBullet(CSession* a_pSession)
+{
+	for (n32 i = 0; i < 4; i++)
+	{
+		CPlayer& rPlayer = this->m_PlayerArray[i];
+		if (rPlayer.m_pSession != a_pSession)
+		{
+			continue;
+		}
+		rPlayer.LaunchBullet();
 	}
 }
 

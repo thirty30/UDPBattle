@@ -148,3 +148,6 @@ Server/x64/Debug/Server.tlog/unsuccessfulbuild
 Client/x64/Debug/MessageHandler.obj
 Server/x64/Debug/CBattle.obj
 Server/x64/Debug/CPlayer.obj
+Client/x64/Debug/Client.tlog/unsuccessfulbuild
+TCore/x64/Debug/TCore.tlog/unsuccessfulbuild
+TMuffin/x64/Debug/TMuffin.tlog/unsuccessfulbuild

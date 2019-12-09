@@ -7,6 +7,7 @@ tbool InitMessageHandler()
 
 	SET_HANDLER_TABLE(C2S_REGISTER, HandlerRegister);
 	SET_HANDLER_TABLE(C2S_PLAYER_ACTION, HandlerPlayerAction);
+	SET_HANDLER_TABLE(C2S_PLAYER_BULLET, HandlerPlayerBullet);
 
 
 #undef SET_HANDLER_TABLE
@@ -15,5 +16,6 @@ tbool InitMessageHandler()
 
 void HandlerRegister(u32 a_uMsgID, u64 a_nSID, const tcchar* a_pMsgBase, u32 a_uSize);
 void HandlerPlayerAction(u32 a_uMsgID, u64 a_nSID, const tcchar* a_pMsgBase, u32 a_uSize);
+void HandlerPlayerBullet(u32 a_uMsgID, u64 a_nSID, const tcchar* a_pMsgBase, u32 a_uSize);
 
 

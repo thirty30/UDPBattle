@@ -46,6 +46,7 @@ void CServer::OnConnected(sockaddr_in& a_rClient)
 		return;
 	}
 	this->AddSession(a_rClient);
+	cout << "new session: " << nSID << endl;
 }
 
 void CServer::OnDisconnected(sockaddr_in& a_rClient)
@@ -192,16 +193,18 @@ void CServer::LoopNet()
 		this->OnConnected(client);
 		this->OnReceived(client, this->m_pReceiveBuffer, nLen);
 	}
-	else if (nLen == 0)
-	{
-		this->OnDisconnected(client);
-	}
 	else
 	{
 		if (WSAGetLastError() == WSAEWOULDBLOCK)
 		{
 			return;
 		}
+
+		if (WSAGetLastError() == WSAECONNRESET)
+		{
+			this->OnDisconnected(client);
+		}
+
 		TMemzero(this->m_pReceiveBuffer, SERVER_RECEIVE_BUFFER_SIZE);
 	}
 }

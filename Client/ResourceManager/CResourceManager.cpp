@@ -37,6 +37,7 @@ tbool CResourceManager::Init()
 
 	// Load Shaders
 	this->LoaderShader(E_SHADER_ID_DEFAULT, "../Assets/shaders/DefaultVertexShader.glsl", "../Assets/shaders/DefaultFragmentShader.glsl");
+	this->LoaderShader(E_SHADER_ID_BULLET, "../Assets/shaders/DefaultVertexShader.glsl", "../Assets/shaders/DefaultFragmentShader.glsl");
 	this->LoaderShader(E_SHADER_ID_STANDARD, "../Assets/shaders/StandardVertexShader.glsl", "../Assets/shaders/StandardFragmentShader.glsl");
 	this->LoaderShader(E_SHADER_ID_SKYBOX, "../Assets/shaders/SkyBoxVertexShader.glsl", "../Assets/shaders/SkyBoxFragmentShader.glsl");
 
@@ -46,6 +47,7 @@ tbool CResourceManager::Init()
 
 	// Load Materials
 	this->LoadMaterial(E_MATERIAL_ID_DEFAULT, E_SHADER_ID_DEFAULT);
+	this->LoadMaterial(E_MATERIAL_ID_BULLET, E_SHADER_ID_BULLET);
 	this->LoadMaterial(E_MATERIAL_ID_STANDARD, E_SHADER_ID_STANDARD);
 
 
@@ -175,7 +177,7 @@ CMaterialBase* CResourceManager::LoadMaterial(EMaterialID a_eMaterialID, EShader
 		return pMaterial;
 	}
 
-	if (a_eMaterialID == E_MATERIAL_ID_DEFAULT)
+	if (a_eMaterialID == E_MATERIAL_ID_DEFAULT || a_eMaterialID == E_MATERIAL_ID_BULLET)
 	{
 		pMaterial = new CMaterialDefault();
 	}

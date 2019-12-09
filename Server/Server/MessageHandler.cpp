@@ -18,5 +18,11 @@ void CServer::HandlerRegister(u32 a_uMsgID, u64 a_nSID, const tcchar* a_pMsgBase
 void CServer::HandlerPlayerAction(u32 a_uMsgID, u64 a_nSID, const tcchar* a_pMsgBase, u32 a_uSize)
 {
 	READ_CLIENT_MESSAGE(a_uMsgID, PPlayerAction);
-	CBattle::GetSingleton().PlayerAction(pSession, msgRecv.GetAction());
+	CBattle::GetSingleton().PlayerAction(pSession, msgRecv);
+}
+
+void CServer::HandlerPlayerBullet(u32 a_uMsgID, u64 a_nSID, const tcchar* a_pMsgBase, u32 a_uSize)
+{
+	READ_CLIENT_MESSAGE(a_uMsgID, PMessageN8);
+	CBattle::GetSingleton().PlayerBullet(pSession);
 }

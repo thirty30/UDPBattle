@@ -11,6 +11,7 @@ private:
 	hash_map<u64, CGameObject*> m_mapID2GameObj;
 	CSkyBox* m_pSkyBox;
 	f32 m_fLastFrameTime;
+	f32 m_fLastSyncTime;
 
 public:
 	CActor* m_pActorArray[4];

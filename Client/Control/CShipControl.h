@@ -5,6 +5,7 @@ class CShipControl : public CSingleton<CShipControl>
 {
 public:
 	CActor* pActor;
+	n8 m_nID;
 
 public:
 	CShipControl();

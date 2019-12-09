@@ -15,7 +15,8 @@ public:
 	void SyncPlayerState(f32 a_fNowTime);
 	void AddPlayer(CSession* a_pSession);
 	void DeletePlayer(u64 a_nSID);
-	void PlayerAction(CSession* a_pSession, n8 a_nAction);
+	void PlayerAction(CSession* a_pSession, PPlayerAction& a_rMsg);
+	void PlayerBullet(CSession* a_pSession);
 };
 
 

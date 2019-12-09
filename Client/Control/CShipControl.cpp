@@ -3,7 +3,7 @@ T_IMPLEMENT_SINGLETON(CShipControl)
 
 CShipControl::CShipControl()
 {
-
+	this->m_nID = -1;
 }
 
 CShipControl::~CShipControl()
@@ -66,8 +66,7 @@ void CShipControl::ControlKeyPress(n32 a_nKey, n32 a_nScancode, n32 a_nAction, n
 	{
 		if (a_nAction == GLFW_PRESS)
 		{
-			CBullet* pBullet = new CBullet();
-			pBullet->m_vVelocity = this->pActor->m_vTowards * 100.0f;
+			this->pActor->m_bullet->Launch(this->pActor->m_vPosition, this->pActor->m_vTowards);
 		}
 	}
 	

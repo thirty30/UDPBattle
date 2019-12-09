@@ -1,5 +1,20 @@
 #pragma once
 
+class CBullet
+{
+public:
+	tbool m_bIsActive;
+	glm::vec3 m_vPosition;
+	glm::vec3 m_vTowards;
+	f32 m_fLifeTime;
+
+	CBullet()
+	{
+		this->m_bIsActive = false;
+		this->m_fLifeTime = 0.0f;
+	}
+	~CBullet() {}
+};
 
 class CPlayer
 {
@@ -14,6 +29,8 @@ public:
 	n8  m_nAction;
 	glm::quat m_qRotation;
 
+	CBullet m_bullet;
+
 	CPlayer();
 	~CPlayer();
 
@@ -23,6 +40,8 @@ public:
 	void BotMove();
 
 	void Move(f32 a_fDeltaTime);
+	void LaunchBullet();
+	void UpdateBullet(f32 a_fDeltaTime);
 
 	void UpdateRotation(glm::vec3 a_vEulerAngle);
 	glm::vec3 GetEulerAngle();

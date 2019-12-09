@@ -8,6 +8,7 @@ CScene::CScene()
 	this->m_nGUIDIdx = 0;
 	this->m_pSkyBox = NULL;
 	this->m_fLastFrameTime = 0;
+	this->m_fLastSyncTime = 0;
 }
 
 CScene::~CScene()
@@ -69,6 +70,13 @@ tbool CScene::LoadScene()
 		CTexture* pTexture = CResourceManager::GetSingleton().FindTexture(E_TEXTURE_ID_DIFFUSE);
 		pMaterial->AddTexture(pTexture);
 		this->m_pActorArray[i]->InitRenderer(pMeshShip, pMaterial);
+
+		CBullet* pBullet = new CBullet();
+		CMesh* pMeshSphere = CResourceManager::GetSingleton().FindMesh(E_MODEL_ID_SPHERE);
+		CMaterialDefault* pMaterialBullet = (CMaterialDefault*)CResourceManager::GetSingleton().FindMaterial(E_MATERIAL_ID_BULLET);
+		pMaterialBullet->SetColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+		pBullet->InitRenderer(pMeshSphere, pMaterialBullet);
+		this->m_pActorArray[i]->m_bullet = pBullet;
 	}	
 	
 	for (n32 i = 0; i < 4; i++)
@@ -77,6 +85,13 @@ tbool CScene::LoadScene()
 		CMaterialDefault* pMaterial = (CMaterialDefault*)CResourceManager::GetSingleton().FindMaterial(E_MATERIAL_ID_DEFAULT);
 		pMaterial->SetColor(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
 		this->m_pServerActorArray[i]->InitRenderer(pMeshShip, pMaterial);
+
+		CBullet* pBullet = new CBullet();
+		CMesh* pMeshSphere = CResourceManager::GetSingleton().FindMesh(E_MODEL_ID_SPHERE);
+		pMaterial = (CMaterialDefault*)CResourceManager::GetSingleton().FindMaterial(E_MATERIAL_ID_DEFAULT);
+		pBullet->InitRenderer(pMeshSphere, pMaterial);
+		pBullet->SetEnable(true);
+		this->m_pServerActorArray[i]->m_bullet = pBullet;
 	}
 
 	PRegister msgSend;
@@ -109,9 +124,24 @@ void CScene::Loop()
 	this->m_fLastFrameTime = fNowTime;
 
 	//fDeltaTime = 1.0f / 60;
-	if (CShipControl::GetSingleton().pActor != NULL)
+	CActor* pSelf = CShipControl::GetSingleton().pActor;
+	if (pSelf != NULL)
 	{
-		CShipControl::GetSingleton().pActor->Update(fDeltaTime);
+		pSelf->Update(fDeltaTime);
+
+		if (fNowTime - this->m_fLastSyncTime >= (1 / RESURGENCE_TIME))
+		{
+			PPlayerAction msgSend;
+			msgSend.SetAction(pSelf->m_nAction);
+			msgSend.SetX(pSelf->m_vPosition.x);
+			msgSend.SetZ(pSelf->m_vPosition.z);
+			msgSend.SetRY(pSelf->m_qRotation.y);
+			msgSend.SetRW(pSelf->m_qRotation.w);
+			msgSend.SetTX(pSelf->m_vTowards.x);
+			msgSend.SetTZ(pSelf->m_vTowards.z);
+			CGame::GetSingleton().SendToServer(C2S_PLAYER_ACTION, msgSend);
+			this->m_fLastSyncTime = fNowTime;
+		}
 	}
 	for (n32 i = 0; i < 4; i++)
 	{

@@ -13,8 +13,8 @@
 #include "./Control/CControl.h"
 #include "./Control/CCameraControl.h"
 #include "./Control/CShipControl.h"
-#include "./Actor/CActor.h"
 #include "./Actor/CBullet.h"
+#include "./Actor/CActor.h"
 #include "./Scene/CScene.h"
 
 ////////////////////////////////////

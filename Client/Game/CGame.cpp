@@ -3,8 +3,8 @@ T_IMPLEMENT_SINGLETON(CGame)
 	
 CGame::CGame()
 {
-	this->m_nScreenWidth = 1600;
-	this->m_nScreenHigh = 900;
+	this->m_nScreenWidth = 800;
+	this->m_nScreenHigh = 450;
 	this->m_strWindowName = "pExample";
 	this->m_pResManager = NULL;
 	this->m_pScene = NULL;
@@ -66,7 +66,6 @@ void CGame::ClearGame()
 	}
 
 	UnRegisterMessageHeap(&m_SendHeap);
-
 	//release engine
 	TMuffin_Clear();
 }

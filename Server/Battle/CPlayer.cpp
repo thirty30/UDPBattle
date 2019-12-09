@@ -45,18 +45,15 @@ void CPlayer::PacketInfo(PPlayerState* a_pState)
 	a_pState->SetAction(this->m_nAction);
 	a_pState->SetX(this->m_vPosition.x);
 	a_pState->SetZ(this->m_vPosition.z);
-	//glm::vec3 vAngle = this->GetEulerAngle();
-	//a_pState->SetRX(vAngle.x);
-	//a_pState->SetRY(vAngle.y);
-	//a_pState->SetRZ(vAngle.z);
-	a_pState->SetRX(this->m_qRotation.x);
 	a_pState->SetRY(this->m_qRotation.y);
-	a_pState->SetRZ(this->m_qRotation.z);
 	a_pState->SetRW(this->m_qRotation.w);
-
 	a_pState->SetTX(this->m_vTowards.x);
 	a_pState->SetTZ(this->m_vTowards.z);
-
+	a_pState->SetBActive(this->m_bullet.m_bIsActive);
+	a_pState->SetBX(this->m_bullet.m_vPosition.x);
+	a_pState->SetBZ(this->m_bullet.m_vPosition.z);
+	a_pState->SetBTX(this->m_bullet.m_vTowards.x);
+	a_pState->SetBTZ(this->m_bullet.m_vTowards.z);
 }
 
 void CPlayer::Move(f32 a_fDeltaTime)
@@ -94,6 +91,32 @@ void CPlayer::Move(f32 a_fDeltaTime)
 		vFront = matRotY * vFront;
 		this->m_vTowards = vFront;
 		this->UpdateRotation(glm::vec3(0.0f, -PLAYER_ROTATION_VELOCITY * a_fDeltaTime, 0.0f));
+	}
+}
+
+void CPlayer::LaunchBullet()
+{
+	if (this->m_bullet.m_bIsActive == true)
+	{
+		return;
+	}
+	this->m_bullet.m_bIsActive = true;
+	this->m_bullet.m_vPosition = this->m_vPosition;
+	this->m_bullet.m_vTowards = this->m_vTowards;
+}
+
+void CPlayer::UpdateBullet(f32 a_fDeltaTime)
+{
+	if (this->m_bullet.m_bIsActive == false)
+	{
+		return;
+	}
+	this->m_bullet.m_vPosition += this->m_bullet.m_vTowards * BULLET_VELOCITY * a_fDeltaTime;
+	this->m_bullet.m_fLifeTime += a_fDeltaTime;
+	if (this->m_bullet.m_fLifeTime >= BULLET_LIFE_TIME)
+	{
+		this->m_bullet.m_fLifeTime = 0.0f;
+		this->m_bullet.m_bIsActive = false;
 	}
 }
 
