@@ -20,6 +20,7 @@ using namespace std;
 
 #include "../TCore/TCore.h"
 #include "../Protocol/TProtocol.h"
+#include "../Protocol/ConstantDefine.h"
 #include "./CommonDefine.h"
 #include "./Server/CSession.h"
 #include "./Battle/CPlayer.h"

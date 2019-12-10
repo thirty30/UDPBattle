@@ -109,6 +109,16 @@ tbool CGame::InitNet()
 	this->m_sockAddr.sin_port = htons(SERVER_PORT);
 	this->m_sockAddr.sin_addr.s_addr = inet_addr(SERVER_ADDRESS);
 
+	sockaddr_in receAddr;
+	receAddr.sin_family = AF_INET;
+	receAddr.sin_port = htons(this->m_nPort);
+	receAddr.sin_addr.s_addr = htonl(INADDR_ANY);
+
+	if (bind(this->m_nSocketFD, (SOCKADDR*)&receAddr, sizeof(receAddr)) == SOCKET_ERROR)
+	{
+		return false;
+	}
+
 	unsigned long ub = 1;
 	if (ioctlsocket(this->m_nSocketFD, FIONBIO, (unsigned long*)&ub) == SOCKET_ERROR)
 	{
@@ -125,11 +135,6 @@ void CGame::LoopNet()
 	if (nLen > 0)
 	{
 		this->OnReceived(this->m_pReceiveBuffer, nLen);
-	}
-	else if (nLen == 0)
-	{
-		cout << "Server closed..." << endl;
-		return;
 	}
 	else
 	{

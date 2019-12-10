@@ -34,6 +34,7 @@
     <ClInclude Include="Battle\CPlayer.h">
       <Filter>Battle</Filter>
     </ClInclude>
+    <ClInclude Include="..\Protocol\ConstantDefine.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Server">

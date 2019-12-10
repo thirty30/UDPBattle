@@ -3,7 +3,6 @@ T_IMPLEMENT_SINGLETON(CShipControl)
 
 CShipControl::CShipControl()
 {
-	this->m_nID = -1;
 }
 
 CShipControl::~CShipControl()
@@ -13,16 +12,20 @@ CShipControl::~CShipControl()
 
 void CShipControl::ControlKeyPress(n32 a_nKey, n32 a_nScancode, n32 a_nAction, n32 a_nMods)
 {
-	
+	CActor* pActor = CScene::GetSingleton().GetPlayerActor();
+	if (pActor == NULL)
+	{
+		return;
+	}
 	if (a_nKey == GLFW_KEY_W)
 	{
 		if (a_nAction == GLFW_PRESS)
 		{
-			this->pActor->m_nAction |= ACTION_FRONT;
+			pActor->m_nAction |= ACTION_FRONT;
 		}
 		if (a_nAction == GLFW_RELEASE)
 		{
-			this->pActor->m_nAction ^= ACTION_FRONT;
+			pActor->m_nAction ^= ACTION_FRONT;
 		}
 	}
 
@@ -30,11 +33,11 @@ void CShipControl::ControlKeyPress(n32 a_nKey, n32 a_nScancode, n32 a_nAction, n
 	{
 		if (a_nAction == GLFW_PRESS)
 		{
-			this->pActor->m_nAction |= ACTION_BACK;
+			pActor->m_nAction |= ACTION_BACK;
 		}
 		if (a_nAction == GLFW_RELEASE)
 		{
-			this->pActor->m_nAction ^= ACTION_BACK;
+			pActor->m_nAction ^= ACTION_BACK;
 		}
 	}
 
@@ -42,11 +45,11 @@ void CShipControl::ControlKeyPress(n32 a_nKey, n32 a_nScancode, n32 a_nAction, n
 	{
 		if (a_nAction == GLFW_PRESS)
 		{
-			this->pActor->m_nAction |= ACTION_LEFT;
+			pActor->m_nAction |= ACTION_LEFT;
 		}
 		if (a_nAction == GLFW_RELEASE)
 		{
-			this->pActor->m_nAction ^= ACTION_LEFT;
+			pActor->m_nAction ^= ACTION_LEFT;
 		}
 	}
 
@@ -54,11 +57,11 @@ void CShipControl::ControlKeyPress(n32 a_nKey, n32 a_nScancode, n32 a_nAction, n
 	{
 		if (a_nAction == GLFW_PRESS)
 		{
-			this->pActor->m_nAction |= ACTION_RIGHT;
+			pActor->m_nAction |= ACTION_RIGHT;
 		}
 		if (a_nAction == GLFW_RELEASE)
 		{
-			this->pActor->m_nAction ^= ACTION_RIGHT;
+			pActor->m_nAction ^= ACTION_RIGHT;
 		}
 	}
 
@@ -66,18 +69,10 @@ void CShipControl::ControlKeyPress(n32 a_nKey, n32 a_nScancode, n32 a_nAction, n
 	{
 		if (a_nAction == GLFW_PRESS)
 		{
-			this->pActor->m_bullet->Launch(this->pActor->m_vPosition, this->pActor->m_vTowards);
+			PMessageN8 msgSend;
+			CGame::GetSingleton().SendToServer(C2S_PLAYER_BULLET, msgSend);
 		}
 	}
 	
 }
 
-void CShipControl::ControlMousePress(n32 a_nKey, n32 a_nAction, n32 a_nMods)
-{
-
-}
-
-void CShipControl::ControlCursor(f64 a_fX, f64 a_fY)
-{
-
-}

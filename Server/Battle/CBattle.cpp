@@ -29,7 +29,7 @@ void CBattle::Update(f32 a_fNowTime, f32 a_fDeltaTime)
 	for (n32 i = 0; i < 4; i++)
 	{
 		CPlayer& rPlayer = this->m_PlayerArray[i];
-		if (rPlayer.m_eState == E_PLAYER_STATE_DEAD)
+		if (rPlayer.m_bIsDead == true)
 		{
 			continue;
 		}
@@ -42,7 +42,7 @@ void CBattle::Update(f32 a_fNowTime, f32 a_fDeltaTime)
 			f32 fDis = glm::distance(rTargetPlayer.m_vPosition, rPlayer.m_bullet.m_vPosition);
 			if (fDis <= BULLET_HIT_RADIUS && rPlayer.m_bullet.m_bIsActive == true && i != j)
 			{
-				rTargetPlayer.m_eState = E_PLAYER_STATE_DEAD;
+				rTargetPlayer.m_bIsDead = true;
 			}
 		}
 	}
@@ -62,10 +62,8 @@ void CBattle::SyncPlayerState(f32 a_fNowTime)
 	PPlayerStateList msgSend;
 	for (n32 i = 0; i < 4; i++)
 	{
-		PPlayerState* pState = msgSend.appendPlayerState();
-
 		CPlayer& rPlayer = this->m_PlayerArray[i];
-		rPlayer.PacketInfo(pState);
+		rPlayer.PacketInfo(msgSend);
 	}
 	for (n32 i = 0; i < 4; i++)
 	{

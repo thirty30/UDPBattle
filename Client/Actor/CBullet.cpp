@@ -1,44 +1,29 @@
 #include "stdafx.h"
 
-
-CBullet::CBullet() : CPhysicsObject(this), CGraphicsObject(this)
+CBullet::CBullet()
 {
-	this->SetEnable(false);
-	this->m_fLifeTime = 0;
 }
 
 CBullet::~CBullet()
 {
+}
 
+void CBullet::Init()
+{
+	CMesh* pMeshSphere = CResourceManager::GetSingleton().FindMesh(E_MODEL_ID_SPHERE);
+
+	this->m_pClientActor = new CActor();
+	CMaterialDefault* pM1 = (CMaterialDefault*)CResourceManager::GetSingleton().FindMaterial(E_MATERIAL_ID_BULLET);
+	pM1->SetColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	this->m_pClientActor->InitRenderer(pMeshSphere, pM1);
+
+	this->m_pServerActor = new CActor();
+	CMaterialDefault* pM2 = (CMaterialDefault*)CResourceManager::GetSingleton().FindMaterial(E_MATERIAL_ID_DEFAULT);
+	this->m_pServerActor->InitRenderer(pMeshSphere, pM2);
 }
 
 void CBullet::Update(f32 a_fDeltaTime)
 {
-	if (this->IsEnable() == false)
-	{
-		return;
-	}
+	this->m_pClientActor->m_vPosition += this->m_pClientActor->m_vTowards * BULLET_VELOCITY * a_fDeltaTime;
 
-	this->m_vPosition += this->m_vVelocity * a_fDeltaTime;
-	this->m_fLifeTime += a_fDeltaTime;
-	if (this->m_fLifeTime >= BULLET_LIFE_TIME)
-	{
-		this->m_fLifeTime = 0.0f;
-		this->SetEnable(false);
-	}
-	
-}
-
-void CBullet::Launch(glm::vec3 a_vPos, glm::vec3 a_vTowards)
-{
-	if (this->m_fLifeTime > 0)
-	{
-		return;
-	}
-
-	this->SetEnable(true);
-	this->m_vPosition = a_vPos;
-	this->m_vVelocity = a_vTowards * BULLET_VELOCITY;
-	PMessageN8 msgSend;
-	CGame::GetSingleton().SendToServer(C2S_PLAYER_BULLET, msgSend);
 }

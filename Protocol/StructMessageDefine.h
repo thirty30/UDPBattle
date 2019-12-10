@@ -51,26 +51,18 @@ MESSAGE_HEAD( RegisterResp )
 MSG_ITEM( N8,	Value )
 MESSAGE_TAIL( RegisterResp )
 
-//Sync Player State
+//Sync Actor State
 MESSAGE_HEAD(PlayerState)
-MSG_ITEM( N8,	ID )
-MSG_ITEM( N8,	State )
-MSG_ITEM( N8,	Action )
-MSG_ITEM( F32,	X )
-MSG_ITEM( F32,	Z )
-MSG_ITEM( F32,	RY )
-MSG_ITEM( F32,	RW )
-MSG_ITEM( F32,	TX )
-MSG_ITEM( F32,	TZ )
-MSG_ITEM( N8,	BActive )
-MSG_ITEM( F32,	BX )
-MSG_ITEM( F32,	BZ )
-MSG_ITEM( F32,	BTX )
-MSG_ITEM( F32,	BTZ )
+MSG_ITEM( STR,	Value )
 MESSAGE_TAIL(PlayerState)
+
+MESSAGE_HEAD(BulletState)
+MSG_ITEM( STR,	Value )
+MESSAGE_TAIL(BulletState)
 
 MESSAGE_HEAD(PlayerStateList)
 MSG_ITEM( ARRAY, PlayerState)
+MSG_ITEM( ARRAY, BulletState)
 MESSAGE_TAIL(PlayerStateList)
 
 MESSAGE_HEAD(PlayerAction)
@@ -82,4 +74,6 @@ MSG_ITEM( F32,	RW )
 MSG_ITEM( F32,	TX )
 MSG_ITEM( F32,	TZ )
 MESSAGE_TAIL(PlayerAction)
+
+
 

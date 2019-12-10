@@ -18,9 +18,6 @@
     <ClInclude Include="ResourceManager\CResourceManager.h">
       <Filter>ResourceManager</Filter>
     </ClInclude>
-    <ClInclude Include="Actor\CActor.h">
-      <Filter>Actor</Filter>
-    </ClInclude>
     <ClInclude Include="Control\CShipControl.h">
       <Filter>Control</Filter>
     </ClInclude>
@@ -30,6 +27,16 @@
     <ClInclude Include="Game\MessageHandler.h">
       <Filter>Game</Filter>
     </ClInclude>
+    <ClInclude Include="Actor\CShip.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\CActor.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\CSceneObject.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Protocol\ConstantDefine.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -60,6 +67,9 @@
     </ClCompile>
     <ClCompile Include="Game\MessageHandler.cpp">
       <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\CShip.cpp">
+      <Filter>Actor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

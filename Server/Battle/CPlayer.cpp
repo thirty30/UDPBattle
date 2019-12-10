@@ -7,6 +7,7 @@ CPlayer::CPlayer()
 	this->m_nAction = 0;
 	this->m_qRotation = glm::quat(glm::vec3(0.0f, 0.0f, 0.0f));
 	this->m_vTowards = glm::vec3(0.0f, 0.0f, 1.0f);
+	this->m_bIsDead = false;
 }
 
 CPlayer::~CPlayer()
@@ -38,22 +39,49 @@ void CPlayer::BotMove()
 	}
 }
 
-void CPlayer::PacketInfo(PPlayerState* a_pState)
+void CPlayer::PacketInfo(PPlayerStateList& a_rMsg)
 {
-	a_pState->SetID(this->m_nPlayerID);
-	a_pState->SetState((n8)this->m_eState);
-	a_pState->SetAction(this->m_nAction);
-	a_pState->SetX(this->m_vPosition.x);
-	a_pState->SetZ(this->m_vPosition.z);
-	a_pState->SetRY(this->m_qRotation.y);
-	a_pState->SetRW(this->m_qRotation.w);
-	a_pState->SetTX(this->m_vTowards.x);
-	a_pState->SetTZ(this->m_vTowards.z);
-	a_pState->SetBActive(this->m_bullet.m_bIsActive);
-	a_pState->SetBX(this->m_bullet.m_vPosition.x);
-	a_pState->SetBZ(this->m_bullet.m_vPosition.z);
-	a_pState->SetBTX(this->m_bullet.m_vTowards.x);
-	a_pState->SetBTZ(this->m_bullet.m_vTowards.z);
+	PPlayerState* pPlayerState = a_rMsg.appendPlayerState();
+	PBulletState* pBulletState = a_rMsg.appendBulletState();
+
+	tcchar pPlayerData[64];
+	n32 nOffset = 0;
+	n8 nFlag = 0;
+	nFlag |= this->m_nPlayerID;
+	nFlag |= (n8)this->m_bIsDead << 3;
+	nFlag |= this->m_nAction << 4;
+	
+	n16 nX = (n16)(this->m_vPosition.x * 100);
+	n16 nZ = (n16)(this->m_vPosition.z * 100);
+	n16 nTX = (n16)(this->m_vTowards.x * 10000);
+	n16 nTZ = (n16)(this->m_vTowards.z * 10000);
+
+	TMemcpy(pPlayerData + nOffset, 64, (tcchar*)&nFlag, 1); nOffset += 1;
+	TMemcpy(pPlayerData + nOffset, 64, (tcchar*)&nX, 2); nOffset += 2;
+	TMemcpy(pPlayerData + nOffset, 64, (tcchar*)&nZ, 2); nOffset += 2;
+	TMemcpy(pPlayerData + nOffset, 64, (tcchar*)&this->m_qRotation.y, 4); nOffset += 4;
+	TMemcpy(pPlayerData + nOffset, 64, (tcchar*)&this->m_qRotation.w, 4); nOffset += 4;
+	TMemcpy(pPlayerData + nOffset, 64, (tcchar*)&nTX, 2); nOffset += 2;
+	TMemcpy(pPlayerData + nOffset, 64, (tcchar*)&nTZ, 2); nOffset += 2;
+	pPlayerState->AllocValue(pPlayerData, nOffset);
+
+	tcchar pBulletData[64];
+	nOffset = 0;
+	nFlag = 0;
+	nFlag |= this->m_nPlayerID + 4;
+	nFlag |= (n8)this->m_bullet.m_bIsActive << 3;
+
+	nX = (n16)(this->m_bullet.m_vPosition.x * 100);
+	nZ = (n16)(this->m_bullet.m_vPosition.z * 100);
+	nTX = (n16)(this->m_bullet.m_vTowards.x * 10000);
+	nTZ = (n16)(this->m_bullet.m_vTowards.z * 10000);
+
+	TMemcpy(pBulletData + nOffset, 64, (tcchar*)&nFlag, 1); nOffset += 1;
+	TMemcpy(pBulletData + nOffset, 64, (tcchar*)&nX, 2); nOffset += 2;
+	TMemcpy(pBulletData + nOffset, 64, (tcchar*)&nZ, 2); nOffset += 2;
+	TMemcpy(pBulletData + nOffset, 64, (tcchar*)&nTX, 2); nOffset += 2;
+	TMemcpy(pBulletData + nOffset, 64, (tcchar*)&nTZ, 2); nOffset += 2;
+	pBulletState->AllocValue(pBulletData, nOffset);
 }
 
 void CPlayer::Move(f32 a_fDeltaTime)
@@ -65,32 +93,32 @@ void CPlayer::Move(f32 a_fDeltaTime)
 
 	if ((this->m_nAction & ACTION_FRONT) == ACTION_FRONT)
 	{
-		this->m_vPosition += this->m_vTowards * PLAYER_VELOCITY * a_fDeltaTime;
+		this->m_vPosition += this->m_vTowards * SHIP_VELOCITY * a_fDeltaTime;
 	}
 
 	if ((this->m_nAction & ACTION_BACK) == ACTION_BACK)
 	{
-		this->m_vPosition += -this->m_vTowards * PLAYER_VELOCITY * a_fDeltaTime;
+		this->m_vPosition += -this->m_vTowards * SHIP_VELOCITY * a_fDeltaTime;
 	}
 
 	if ((this->m_nAction & ACTION_LEFT) == ACTION_LEFT)
 	{
 		glm::vec4 vFront = glm::vec4(this->m_vTowards, 1.0f);
-		f32 fYAngle = glm::radians(PLAYER_ROTATION_VELOCITY * a_fDeltaTime);
+		f32 fYAngle = glm::radians(SHIP_ROTATION_VELOCITY * a_fDeltaTime);
 		glm::mat4 matRotY = glm::rotate(glm::mat4(1.0f), fYAngle, glm::vec3(0.0f, 1.0f, 0.0f));
 		vFront = matRotY * vFront;
 		this->m_vTowards = vFront;
-		this->UpdateRotation(glm::vec3(0.0f, PLAYER_ROTATION_VELOCITY * a_fDeltaTime, 0.0f));
+		this->UpdateRotation(glm::vec3(0.0f, SHIP_ROTATION_VELOCITY * a_fDeltaTime, 0.0f));
 	}
 
 	if ((this->m_nAction & ACTION_RIGHT) == ACTION_RIGHT)
 	{
 		glm::vec4 vFront = glm::vec4(this->m_vTowards, 1.0f);
-		f32 fYAngle = glm::radians(-PLAYER_ROTATION_VELOCITY * a_fDeltaTime);
+		f32 fYAngle = glm::radians(-SHIP_ROTATION_VELOCITY * a_fDeltaTime);
 		glm::mat4 matRotY = glm::rotate(glm::mat4(1.0f), fYAngle, glm::vec3(0.0f, 1.0f, 0.0f));
 		vFront = matRotY * vFront;
 		this->m_vTowards = vFront;
-		this->UpdateRotation(glm::vec3(0.0f, -PLAYER_ROTATION_VELOCITY * a_fDeltaTime, 0.0f));
+		this->UpdateRotation(glm::vec3(0.0f, -SHIP_ROTATION_VELOCITY * a_fDeltaTime, 0.0f));
 	}
 }
 

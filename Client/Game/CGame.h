@@ -15,6 +15,7 @@ private:
 	TMessageSendHeap m_SendHeap;
 	tcchar* m_pSendBuffer;
 	tcchar* m_pReceiveBuffer;
+	n32 m_nPort;
 
 #include "./MessageHandler.h"
 
@@ -28,6 +29,7 @@ public:
 	tbool InitGame();
 	void ClearGame();
 	void LoopGame();
+	void SetUDPPort(n32 a_nPort) { this->m_nPort = a_nPort; }
 
 	/////////////////////////////////////////////////////////////////
 	tbool InitNet();
@@ -43,6 +45,7 @@ public:
 	CScene* GetCurrentScene() { return this->m_pScene; }
 	CResourceManager* GetResourceManager() { return this->m_pResManager; }
 	void GameLogicLoop();
+	
 };
 
 

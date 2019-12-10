@@ -132,12 +132,15 @@
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>glfw3.lib;glfw3dll.lib;lua5.3.5.lib;TCore.lib;TMuffin.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;glfw3dll.lib;TCore.lib;TMuffin.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Protocol\ConstantDefine.h" />
     <ClInclude Include="Actor\CBullet.h" />
     <ClInclude Include="Actor\CActor.h" />
+    <ClInclude Include="Actor\CSceneObject.h" />
+    <ClInclude Include="Actor\CShip.h" />
     <ClInclude Include="CommonDefine.h" />
     <ClInclude Include="Control\CCameraControl.h" />
     <ClInclude Include="Control\CControl.h" />
@@ -151,6 +154,7 @@
   <ItemGroup>
     <ClCompile Include="Actor\CBullet.cpp" />
     <ClCompile Include="Actor\CActor.cpp" />
+    <ClCompile Include="Actor\CShip.cpp" />
     <ClCompile Include="Control\CCameraControl.cpp" />
     <ClCompile Include="Control\CControl.cpp" />
     <ClCompile Include="Control\CShipControl.cpp" />

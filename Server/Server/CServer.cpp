@@ -46,7 +46,7 @@ void CServer::OnConnected(sockaddr_in& a_rClient)
 		return;
 	}
 	this->AddSession(a_rClient);
-	cout << "new session: " << nSID << endl;
+	//cout << "new session: " << nSID << endl;
 }
 
 void CServer::OnDisconnected(sockaddr_in& a_rClient)
@@ -86,7 +86,7 @@ void CServer::SendToClient(u32 a_uMsgID, u64 a_nSID, const PMessageBase& a_Msg)
 	}
 	MessageHeader sHeader;
 	n32 nHeaderSize = sHeader.GetLength();
-	n32 nMsgLen = a_Msg.Serialize(m_pSendBuffer + nHeaderSize, SERVER_SEND_BUFFER_SIZE - nHeaderSize);
+	n32 nMsgLen = a_Msg.Serialize(m_pSendBuffer + nHeaderSize, SEND_BUFFER_SIZE - nHeaderSize);
 
 	sHeader.SetMsgID(a_uMsgID);
 	sHeader.SetMsgLength(nHeaderSize + nMsgLen);
@@ -109,7 +109,7 @@ void CServer::SendToClient(u32 a_uMsgID, u64 a_nSID, const tcchar* a_pData, u32 
 	sHeader.SetCompress(0);
 
 	sHeader.Serialize(m_pSendBuffer, nHeaderSize);
-	TMemcpy(m_pSendBuffer + nHeaderSize, SERVER_SEND_BUFFER_SIZE - nHeaderSize, a_pData, a_uLen);
+	TMemcpy(m_pSendBuffer + nHeaderSize, SEND_BUFFER_SIZE - nHeaderSize, a_pData, a_uLen);
 
 	sendto(this->m_nListenFD, m_pSendBuffer, sHeader.GetMsgLength(), 0, (struct sockaddr*)&pSession->m_pClient, sizeof(pSession->m_pClient));
 }
@@ -136,8 +136,8 @@ tbool CServer::Init()
 
 tbool CServer::InitNet()
 {
-	this->m_pReceiveBuffer = new tcchar[SERVER_RECEIVE_BUFFER_SIZE];
-	this->m_pSendBuffer = new tcchar[SERVER_SEND_BUFFER_SIZE];
+	this->m_pReceiveBuffer = new tcchar[RECEIVE_BUFFER_SIZE];
+	this->m_pSendBuffer = new tcchar[SEND_BUFFER_SIZE];
 	m_SendHeap.AllocHeap(MAX_SEND_HEAP_LENGTH);
 	RegisterMessageHeap(&m_SendHeap);
 
@@ -165,7 +165,7 @@ tbool CServer::InitNet()
 
 	sockaddr_in receAddr;
 	receAddr.sin_family = AF_INET;
-	receAddr.sin_port = htons(LISTEN_PORT);
+	receAddr.sin_port = htons(SERVER_PORT);
 	receAddr.sin_addr.s_addr = htonl(INADDR_ANY);
 
 	if (bind(this->m_nListenFD, (SOCKADDR*)&receAddr, sizeof(receAddr)) == SOCKET_ERROR)
@@ -187,7 +187,7 @@ void CServer::LoopNet()
 	sockaddr_in client;
 	n32 nClientLen = sizeof(client);
 
-	n32 nLen = recvfrom(this->m_nListenFD, this->m_pReceiveBuffer, SERVER_RECEIVE_BUFFER_SIZE, 0, (struct sockaddr*)&client, &nClientLen);
+	n32 nLen = recvfrom(this->m_nListenFD, this->m_pReceiveBuffer, RECEIVE_BUFFER_SIZE, 0, (struct sockaddr*)&client, &nClientLen);
 	if (nLen > 0)
 	{
 		this->OnConnected(client);
@@ -205,7 +205,7 @@ void CServer::LoopNet()
 			this->OnDisconnected(client);
 		}
 
-		TMemzero(this->m_pReceiveBuffer, SERVER_RECEIVE_BUFFER_SIZE);
+		TMemzero(this->m_pReceiveBuffer, RECEIVE_BUFFER_SIZE);
 	}
 }
 

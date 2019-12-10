@@ -9,12 +9,17 @@
 #include "../TMuffin/TMuffin.h"
 #include "../Protocol/TProtocol.h"
 #include "./CommonDefine.h"
+#include "../Protocol/ConstantDefine.h"
 #include "./ResourceManager/CResourceManager.h"
 #include "./Control/CControl.h"
 #include "./Control/CCameraControl.h"
 #include "./Control/CShipControl.h"
-#include "./Actor/CBullet.h"
+
+#include "./Actor/CSceneObject.h"
 #include "./Actor/CActor.h"
+#include "./Actor/CBullet.h"
+#include "./Actor/CShip.h"
+
 #include "./Scene/CScene.h"
 
 ////////////////////////////////////

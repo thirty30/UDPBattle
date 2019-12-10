@@ -28,13 +28,14 @@ public:
 	f32 m_fDeadTime;
 	n8  m_nAction;
 	glm::quat m_qRotation;
+	tbool m_bIsDead;
 
 	CBullet m_bullet;
 
 	CPlayer();
 	~CPlayer();
 
-	void PacketInfo(PPlayerState* a_pState);
+	void PacketInfo(PPlayerStateList& a_rMsg);
 
 	void InitPosition();
 	void BotMove();

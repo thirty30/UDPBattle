@@ -1,6 +1,6 @@
 #pragma once
 
-class CScene
+class CScene : public CSingleton<CScene>
 {
 private:
 	u64 m_nSceneID;
@@ -8,17 +8,16 @@ private:
 	CCameraControl* m_pCameraControl;
 	CShipControl* m_pShipControl;
 	u64 m_nGUIDIdx;
-	hash_map<u64, CGameObject*> m_mapID2GameObj;
 	CSkyBox* m_pSkyBox;
 	f32 m_fLastFrameTime;
 	f32 m_fLastSyncTime;
 
-public:
-	CActor* m_pActorArray[4];
-	CActor* m_pServerActorArray[4];
-
 private:
 	u64 GenGUID();
+
+public:
+	CSceneObject* m_pObjArray[8];
+	n8 m_nPlayerID;
 
 public:
 	CScene();
@@ -30,6 +29,10 @@ public:
 	void Loop();
 
 	CCamera* GetCamera() { return this->m_pCamera; }
+	CActor* GetPlayerActor();
+	CActor* GetClientActor(n32 a_nIdx) { return this->m_pObjArray[a_nIdx]->m_pClientActor; }
+	CActor* GetServerActor(n32 a_nIdx) { return this->m_pObjArray[a_nIdx]->m_pServerActor; }
+	
 };
 
 
