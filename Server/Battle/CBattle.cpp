@@ -140,3 +140,16 @@ void CBattle::PlayerBullet(CSession* a_pSession)
 	}
 }
 
+void CBattle::Resurgence(CSession* a_pSession)
+{
+	for (n32 i = 0; i < 4; i++)
+	{
+		CPlayer& rPlayer = this->m_PlayerArray[i];
+		if (rPlayer.m_pSession != a_pSession)
+		{
+			continue;
+		}
+		rPlayer.m_bIsDead = false;
+	}
+}
+

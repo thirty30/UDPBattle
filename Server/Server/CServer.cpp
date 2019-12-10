@@ -46,7 +46,6 @@ void CServer::OnConnected(sockaddr_in& a_rClient)
 		return;
 	}
 	this->AddSession(a_rClient);
-	cout << "new session: " << nSID << endl;
 }
 
 void CServer::OnDisconnected(sockaddr_in& a_rClient)

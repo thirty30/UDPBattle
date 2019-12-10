@@ -52,12 +52,12 @@ void CGame::HandlerSyncPlayerState(u32 a_uMsgID, const tcchar* a_pMsgData, u32 a
 		if (bIsDead == true)
 		{
 			pClientActor->SetEnable(false);
-			pServerActor->SetEnable(false);
+			//pServerActor->SetEnable(false);
 			continue;
 		}
 
 		pClientActor->SetEnable(true);
-		pServerActor->SetEnable(true);
+		//pServerActor->SetEnable(true);
 
 		if (nID != CScene::GetSingleton().m_nPlayerID)
 		{

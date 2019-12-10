@@ -29,9 +29,12 @@ void CCameraControl::CameraControlKeyPress(n32 a_nKey, n32 a_nScancode, n32 a_nA
 	f32 testspeed = 20.0f;
 	switch (a_nKey)
 	{
-	case GLFW_KEY_W:
+	case GLFW_KEY_1:
 	{
-
+		if (a_nAction == GLFW_PRESS)
+		{
+			CScene::GetSingleton().ShowServerObject();
+		}
 	}
 	break;
 	case GLFW_KEY_A:

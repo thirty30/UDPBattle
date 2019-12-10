@@ -32,7 +32,7 @@ public:
 	CActor* GetPlayerActor();
 	CActor* GetClientActor(n32 a_nIdx) { return this->m_pObjArray[a_nIdx]->m_pClientActor; }
 	CActor* GetServerActor(n32 a_nIdx) { return this->m_pObjArray[a_nIdx]->m_pServerActor; }
-	
+	void ShowServerObject();
 };
 
 

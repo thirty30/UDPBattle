@@ -17,6 +17,7 @@ public:
 	void DeletePlayer(u64 a_nSID);
 	void PlayerAction(CSession* a_pSession, PPlayerAction& a_rMsg);
 	void PlayerBullet(CSession* a_pSession);
+	void Resurgence(CSession* a_pSession);
 };
 
 

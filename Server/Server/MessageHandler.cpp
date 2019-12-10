@@ -26,3 +26,12 @@ void CServer::HandlerPlayerBullet(u32 a_uMsgID, u64 a_nSID, const tcchar* a_pMsg
 	READ_CLIENT_MESSAGE(a_uMsgID, PMessageN8);
 	CBattle::GetSingleton().PlayerBullet(pSession);
 }
+
+void CServer::HandlerResurgence(u32 a_uMsgID, u64 a_nSID, const tcchar* a_pMsgBase, u32 a_uSize)
+{
+	READ_CLIENT_MESSAGE(a_uMsgID, PMessageN8);
+	CBattle::GetSingleton().Resurgence(pSession);
+}
+
+
+

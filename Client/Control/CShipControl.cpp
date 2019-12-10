@@ -73,6 +73,15 @@ void CShipControl::ControlKeyPress(n32 a_nKey, n32 a_nScancode, n32 a_nAction, n
 			CGame::GetSingleton().SendToServer(C2S_PLAYER_BULLET, msgSend);
 		}
 	}
+
+	if (a_nKey == GLFW_KEY_R)
+	{
+		if (a_nAction == GLFW_PRESS)
+		{
+			PMessageN8 msgSend;
+			CGame::GetSingleton().SendToServer(C2S_RESURGENCE, msgSend);
+		}
+	}
 	
 }
 

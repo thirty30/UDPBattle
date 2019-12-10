@@ -134,3 +134,12 @@ CActor* CScene::GetPlayerActor()
 	return pShip->m_pClientActor;
 }
 
+void CScene::ShowServerObject()
+{
+	for (n32 i = 0; i < 8; i++)
+	{
+		CActor* pActor = this->m_pObjArray[i]->m_pServerActor;
+		pActor->SetEnable(!pActor->IsEnable());
+	}
+}
+
