@@ -46,7 +46,7 @@ void CServer::OnConnected(sockaddr_in& a_rClient)
 		return;
 	}
 	this->AddSession(a_rClient);
-	//cout << "new session: " << nSID << endl;
+	cout << "new session: " << nSID << endl;
 }
 
 void CServer::OnDisconnected(sockaddr_in& a_rClient)
@@ -242,6 +242,7 @@ void CServer::Clear()
 	}
 	this->m_mapSID2Session.clear();
 
+	closesocket(this->m_nListenFD);
 	UnRegisterMessageHeap(&m_SendHeap);
 }
 

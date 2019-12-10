@@ -10,7 +10,7 @@ T_INLINE u64 CalcSessionID(sockaddr_in& a_rClient)
 {
 	u32 nIP = a_rClient.sin_addr.S_un.S_addr;
 	u16 nPort = a_rClient.sin_port;
-	return (nIP << 16 + nPort);
+	return (nIP << 16 | nPort);
 }
 
 T_INLINE glm::vec3 RandPosition()
