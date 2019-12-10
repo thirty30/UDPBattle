@@ -20,6 +20,7 @@ void CBullet::Init()
 	this->m_pServerActor = new CActor();
 	CMaterialDefault* pM2 = (CMaterialDefault*)CResourceManager::GetSingleton().FindMaterial(E_MATERIAL_ID_DEFAULT);
 	this->m_pServerActor->InitRenderer(pMeshSphere, pM2);
+	this->m_pServerActor->SetEnable(false);
 }
 
 void CBullet::Update(f32 a_fDeltaTime)

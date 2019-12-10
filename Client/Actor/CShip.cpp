@@ -24,7 +24,7 @@ void CShip::Init()
 	CMaterialDefault* pM2 = (CMaterialDefault*)CResourceManager::GetSingleton().FindMaterial(E_MATERIAL_ID_DEFAULT);
 	pM2->SetColor(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
 	this->m_pServerActor->InitRenderer(pMeshShip, pM2);
-
+	this->m_pServerActor->SetEnable(false);
 }
 
 void CShip::Update(f32 fDeltaTime)
